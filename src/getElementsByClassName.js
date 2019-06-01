@@ -10,6 +10,8 @@
   But we don't like easy! So we'll make you write your own.
 */
 
-const getElementsByClassName = () => {
-  // YOUR CODE HERE
+const getElementsByClassName = (className) => {
+  const nodeList = document.getElementsByClassName(className);
+  const array = Array.prototype.slice.apply(nodeList);
+  return array;
 };
