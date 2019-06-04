@@ -17,6 +17,25 @@
  *   rockPaperScissors(4); // => [['rock', 'rock', 'rock', 'rock'], etc...]
  */
 
-const rockPaperScissors = () => {
-  // Your code here
+const rockPaperScissors = (n = 3) => {
+ const rounds = n;
+ let hands = [];
+
+ const weapons = ["rock", "paper", "scissors"]
+
+ function recursion(roundsLeft, combinations) {
+  //base case
+  if(roundsLeft === 0) {
+    hands.push(combinations);
+    return
+  }
+  
+  //recursion
+  weapons.forEach(weapon => {
+    recursion(roundsLeft-1, combinations.concat(weapon))
+  }) 
+ }
+
+ recursion(rounds, []);
+ return hands;
 };
