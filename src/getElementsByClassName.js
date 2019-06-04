@@ -10,8 +10,25 @@
   But we don't like easy! So we'll make you write your own.
 */
 
-const getElementsByClassName = (className) => {
-  const nodeList = document.getElementsByClassName(className);
-  const array = Array.prototype.slice.apply(nodeList);
-  return array;
+const getElementsByClassName = (className, node = document.body) => {
+  let arr = []
+  
+
+  function recursion(node) {
+    if(node.classList.contains(className)) {
+      arr.push(node);
+    }
+
+    for(let elem of node.children) {
+      if(elem.localName === "script" || elem === undefined) continue;
+    
+      if(elem.firstChild === null && elem.nextSibling !== null) {
+        recursion(elem.nextSibling)
+      } else if(elem.firstChild !== null && elem.firstChild.nodeType !== 3) {
+        recursion(elem.firstChild)
+      } 
+    }
+  }
+  recursion(node)
+  return arr;
 };
