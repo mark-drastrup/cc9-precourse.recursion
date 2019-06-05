@@ -17,7 +17,7 @@ const stringifyJSON = (value) => {
     if(Array.isArray(collection)) {
       let arrStr = collection.reduce((acc, current, index) => {
         if(typeof current === "string") return acc += '"' + current + '"';
-      else if(Array.isArray(current)) {
+      else if(Array.isArray(current) || typeof current === "object") {
         return acc += recurse(current);
       }
       else {
@@ -76,7 +76,7 @@ const stringifyJSON = (value) => {
     })
     }
     
-    JSONstringend = Array.isArray(collection) ? "]" : "}";
+    let JSONstringend = Array.isArray(collection) ? "]" : "}";
     return JSONstring + JSONstringend;
   }
 
