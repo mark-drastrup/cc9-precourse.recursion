@@ -24,7 +24,7 @@ const stringifyJSON = (value) => {
           } else return acc += '"' + current + '"';
         } 
       else if(current instanceof Date) {
-        return acc += recurse(current.toISOString())
+        return acc += '"' + current.toISOString() + '"';
       } 
       else if(Array.isArray(current) || typeof current === "object") {
         if(index !== collection.length -1 && !Array.isArray(current)) {
