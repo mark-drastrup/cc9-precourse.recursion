@@ -10,7 +10,9 @@ const stringifyJSON = (value) => {
   if(typeof value === "boolean" || typeof value === "number" || value === null) return `${value}`;
   else if(typeof value === "string") {
     return '"' + value + '"';
-  } 
+  } else if(value instanceof Date) {
+    return value.toISOString();
+  }
   
   function recurse(collection) {
     let JSONstring = Array.isArray(collection) ? "[" : "{";
@@ -58,23 +60,6 @@ const stringifyJSON = (value) => {
         if(keys[index + 1] !== undefined) {
           JSONstring += ","
         }
-        /* let arr = collection[key].reduce((acc, current, index) => {
-          if(typeof current === "string") {
-            if(index !== collection[key].length -1) {
-              return acc += '"' + current + '"' + ',';
-            } else {
-              return acc += '"' + current + '"';
-            }
-          } 
-          else {
-            if(index !== collection[key].length -1) {
-              return acc += current  + ",";
-            } else {
-              return acc += current;
-            }
-          } 
-        }, "") */
-        //JSONstring += arr + "]"
       } else if(typeof collection[key] === "object") {
         JSONstring += '"' + key + '"' + ":"
         JSONstring += recurse(collection[key])
