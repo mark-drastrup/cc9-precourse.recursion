@@ -11,7 +11,7 @@ const stringifyJSON = (value) => {
   else if(typeof value === "string") {
     return '"' + value + '"';
   } else if(value instanceof Date) {
-    return value.toISOString();
+    return '"' + value.toISOString() + '"';
   }
   
   function recurse(collection) {
