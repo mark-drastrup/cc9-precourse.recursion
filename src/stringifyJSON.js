@@ -40,7 +40,7 @@ const stringifyJSON = (value) => {
     } else {
       let keys = Object.keys(collection)
       keys.forEach((key, index) => {
-      if(typeof collection[key] === "boolean" || typeof collection[key] === "number" || typeof collection[key] === "string") {
+      if(typeof collection[key] === "number" || typeof collection[key] === "string") {
         if(index !== keys.length -1) {
           JSONstring += '"' + key + '"' + ":" + collection[key] + ',';
         } else {
@@ -55,6 +55,9 @@ const stringifyJSON = (value) => {
       } else if(Array.isArray(collection[key])) {
         JSONstring += '"' + key + '"' + ":"
         JSONstring += recurse(collection[key])
+        if(keys[index + 1] !== undefined) {
+          JSONstring += ","
+        }
         /* let arr = collection[key].reduce((acc, current, index) => {
           if(typeof current === "string") {
             if(index !== collection[key].length -1) {
@@ -75,9 +78,15 @@ const stringifyJSON = (value) => {
       } else if(typeof collection[key] === "object") {
         JSONstring += '"' + key + '"' + ":"
         JSONstring += recurse(collection[key])
-      }  else {
-        JSONstring += '"' + key + '"' + ":" + '"' + collection[key] + '"';
-        
+        if(keys[index + 1] !== undefined) {
+          JSONstring += ","
+        }
+      } else if(typeof collection[key] === "boolean"){
+        if(index !== keys.length -1) {
+          JSONstring += '"' + key + '"' + ":" + collection[key] + ',';
+        } else {
+          JSONstring += '"' + key + '"' + ":" + collection[key];
+        }
       }
     })
     }
