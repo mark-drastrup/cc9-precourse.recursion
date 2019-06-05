@@ -16,13 +16,21 @@ const stringifyJSON = (value) => {
     let JSONstring = Array.isArray(collection) ? "[" : "{";
     if(Array.isArray(collection)) {
       let arrStr = collection.reduce((acc, current, index) => {
-        if(typeof current === "string") return acc += '"' + current + '"';
+        if(typeof current === "string") {
+          if(index !== collection.length -1) {
+            return acc += '"' + current + '"' + ',';
+          } else return acc += '"' + current + '"';
+        } 
       else if(Array.isArray(current) || typeof current === "object") {
-        return acc += recurse(current);
+        if(index !== collection.length -1 && !Array.isArray(current)) {
+          return acc += recurse(current) + ","
+        } else return acc += recurse(current);
       }
       else {
         if(index !== collection.length -1) {
-          return acc += current  + ",";
+          if(Array.isArray(collection[index-1]) && !Array.isArray(current)) {
+            return acc += "," + current  + ",";
+          } else return acc += current  + ",";
         } else {
           return acc += current;
         }
@@ -31,7 +39,7 @@ const stringifyJSON = (value) => {
       JSONstring += arrStr;
     } else {
       let keys = Object.keys(collection)
-    keys.forEach((key, index) => {
+      keys.forEach((key, index) => {
       if(typeof collection[key] === "boolean" || typeof collection[key] === "number" || typeof collection[key] === "string") {
         if(index !== keys.length -1) {
           JSONstring += '"' + key + '"' + ":" + collection[key] + ',';
@@ -45,10 +53,9 @@ const stringifyJSON = (value) => {
           JSONstring += '"' + key + '"' + ":" + collection[key];
         }
       } else if(Array.isArray(collection[key])) {
-        console.log("array")
         JSONstring += '"' + key + '"' + ":"
-        JSONstring += "[";
-        let arr = collection[key].reduce((acc, current, index) => {
+        JSONstring += recurse(collection[key])
+        /* let arr = collection[key].reduce((acc, current, index) => {
           if(typeof current === "string") {
             if(index !== collection[key].length -1) {
               return acc += '"' + current + '"' + ',';
@@ -63,10 +70,9 @@ const stringifyJSON = (value) => {
               return acc += current;
             }
           } 
-        }, "")
-        JSONstring += arr + "]"
+        }, "") */
+        //JSONstring += arr + "]"
       } else if(typeof collection[key] === "object") {
-        console.log("object")
         JSONstring += '"' + key + '"' + ":"
         JSONstring += recurse(collection[key])
       }  else {
